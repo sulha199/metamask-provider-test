@@ -14,7 +14,7 @@ export const useOnLoadValue= (key: string) => {
     if (input != null) {
       localStorage.setItem(key, input)
     }
-  }, [key])
+  }, [])
 
   useEffect(() => {
     return () => {
@@ -22,7 +22,7 @@ export const useOnLoadValue= (key: string) => {
         localStorage.removeItem(key)
       }
     }
-  }, [key])
+  }, [])
 
   return {value, updateValue}
 }
