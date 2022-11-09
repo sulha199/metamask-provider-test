@@ -1,0 +1,53 @@
+{
+	"eslint.packageManager": "yarn",
+	"eslint.options": {
+		"extensions": [
+			".ts",
+			".tsx",
+			".html"
+		]
+	},
+	"eslint.lintTask.options": "--ext .ts, .tsx",
+	"eslint.validate": [
+		"javascript",
+		"javascriptreact",
+		"typescript",
+		"typescriptreact",
+		"html"
+	],
+	"editor.rulers": [
+		120
+	],
+	"html.format.wrapLineLength": 120,
+	"html.format.extraLiners": "",
+	"html.format.indentInnerHtml": true,
+	"editor.tabCompletion": "on",
+	"editor.tabSize": 2,
+	"editor.useTabStops": false,
+	"editor.trimAutoWhitespace": true,
+	"editor.formatOnSave": true,
+	"editor.bracketPairColorization.enabled": true,
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"editor.codeActionsOnSave": {
+		"source.organizeImports": true,
+		"source.fixAll": true,
+	},
+	"files.exclude": {
+		"**/.DS_Store": true,
+		"**/.git": true,
+		"dist": true,
+		"node_modules": true,
+		"build": true,
+		"debug": true,
+		"cypress/integration/examples": true
+	},
+	"files.insertFinalNewline": true,
+	"files.trimTrailingWhitespace": true,
+	"typescript.tsdk": "./node_modules/typescript/lib",
+	"typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": true,
+	"typescript.preferences.quoteStyle": "single",
+	"json.format.enable": true,
+	"json.format.keepLines": true,
+	"html.format.enable": false,
+	"typescript.format.semicolons": "remove"
+}
