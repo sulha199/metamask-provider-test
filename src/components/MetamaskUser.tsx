@@ -16,7 +16,11 @@ export const MetamaskUser: FC = () => {
   const { updateValue } = useOnLoadValue(KEY_ON_CHAIN_CHANGES)
 
   useEffect(() => {
-    updateValue(networkVersion)
+    // only store value if window.ethereum?.selectedAddress,
+    // otherwise it will cause the network version alert to show
+    if (window.ethereum?.selectedAddress) {
+      updateValue(networkVersion)
+    }
   }, [networkVersion, updateValue])
 
   // HTML

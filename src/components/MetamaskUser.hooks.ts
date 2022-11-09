@@ -10,8 +10,8 @@ import {
 export type Status = 'none' | 'waiting' | 'done'
 
 const getAccounts = () => window.ethereum?.request<string[]>({ method: 'eth_requestAccounts' })
-/** Return ` window.ethereum.networkVersion` value if user has login to Metamask */
-const getNetworkVersion = () => window.ethereum?.selectedAddress ? window.ethereum.networkVersion : null
+/** Return ` window.ethereum.networkVersion` or null */
+const getNetworkVersion = () => window.ethereum?.networkVersion ?? null
 
 const ONBOARDING = new MetaMaskOnboarding()
 /** Value of 5 Minutes in miliseconds */
