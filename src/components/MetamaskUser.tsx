@@ -1,20 +1,20 @@
 import MetaMaskOnboarding from '@metamask/onboarding'
 import { JsonRpcError, Maybe } from '@metamask/types'
-import { FC, useEffect, useRef, useState } from 'react'
-import { ETH_CODE_PROCESSING, ETH_EVENT_ACCOUNTS_CHANGED, ETH_EVENT_CHAIN_CHANGED } from '../consts'
+import { FC, useCallback, useEffect, useState } from 'react'
+import {
+  ETH_CODE_PROCESSING,
+  ETH_EVENT_ACCOUNTS_CHANGED,
+  ETH_EVENT_CHAIN_CHANGED,
+  KEY_ON_CHAIN_CHANGES,
+} from '../consts'
+import { useOnLoadValue } from '../hooks'
 
-type Status = 'none' | 'processing' | 'done'
+type Status = 'none' | 'waiting' | 'done'
 
-// function getLibrary(provider: ConstructorParameters<typeof Web3Provider>['0']): Web3Provider {
-//   const library = new Web3Provider(provider)
-//   library.pollingInterval = 12000
-//   return library
-// }
-
-const getAccount = () => window.ethereum?.request<string[]>({ method: 'eth_requestAccounts' })
+const getAccounts = () => window.ethereum?.request<string[]>({ method: 'eth_requestAccounts' })
 
 const ONBOARDING = new MetaMaskOnboarding()
-/** 5 Minutes */
+/** Value of 5 Minutes in miliseconds */
 const EXTENSION_INSTALLATION_TIMEOUT = 1000 * 5 * 60
 
 const useEthereumExtension = () => {
@@ -24,8 +24,10 @@ const useEthereumExtension = () => {
   )
 
   const startOnboarding = () => {
-    setExtensionStatus('processing')
+    setExtensionStatus('waiting')
     onboarding.startOnboarding()
+    // use timeout because onboarding API don't emit state if user stopped during onboarding/installation
+    // timeout is to make the button install button appear again
     setTimeout(() => {
       if (!MetaMaskOnboarding.isMetaMaskInstalled()) {
         setExtensionStatus('none')
@@ -42,30 +44,42 @@ const useEthereumAccount = () => {
   const [selectedAddressStatus, setSelectedAddressStatus] = useState<Status>('none')
   const [selectedAddress, setSelectedAddress] = useState<string | undefined>()
   const [selectedAddressError, setSlectedAddressError] = useState<string | undefined>()
+  const [networkVersion, setNetworkVersion] = useState<string | null>(window.ethereum?.networkVersion ?? null)
 
-  const { current: selectAddress } = useRef((adresses: Maybe<string[]>) => {
-    console.log(adresses)
-    setSelectedAddress(adresses?.[0])
-    setSelectedAddressStatus(adresses?.[0] ? 'done' : 'none')
-  })
+  /**
+   ** if `adresses == []` then `SelectedAddressStatus = none`
+   ** if `adresses[0] != null` then `SelectedAddressStatus = done`
+   ** if `adresses == null` then `SelectedAddressStatus = waiting`
+   */
+  const selectAddress = useCallback((adresses: Maybe<string[]>) => {
+    const address = adresses?.[0]
+    if (adresses !== null) {
+      setSelectedAddressStatus(address ? 'done' : 'none')
+    }
+    setSelectedAddress(address)
+  }, [])
 
-  const { current: onChainChanged } = useRef((chainId: string) => {
-    window.location.reload()
-  })
+  const onChainChanged = useCallback(() => {
+    setTimeout(() => {
+      setNetworkVersion(window.ethereum?.networkVersion ?? null)
+      window.location.reload()
+    })
+  }, [])
 
   useEffect(() => {
     if (extensionStatus !== 'done') {
       return
     }
 
-    getAccount()
+    getAccounts()
       ?.catch(({ message, code }: JsonRpcError) => {
+        // return value refers to `selectAddress()` params
         if (code === ETH_CODE_PROCESSING) {
-          setSelectedAddressStatus('processing')
+          setSelectedAddressStatus('waiting')
           return null
         }
         setSlectedAddressError(message)
-        return null
+        return []
       })
       .then(selectAddress)
     window.ethereum?.on(ETH_EVENT_ACCOUNTS_CHANGED, selectAddress)
@@ -76,19 +90,31 @@ const useEthereumAccount = () => {
     }
   }, [extensionStatus, selectAddress, onChainChanged])
 
-  return { ...extension, selectedAddress, selectedAddressStatus, selectedAddressError }
+  return { ...extension, selectedAddress, selectedAddressStatus, selectedAddressError, networkVersion }
 }
 
 export const MetamaskUser: FC = () => {
-  const { extensionStatus, selectedAddress, startOnboarding, selectedAddressStatus, selectedAddressError } =
-    useEthereumAccount()
+  const {
+    extensionStatus,
+    selectedAddress,
+    startOnboarding,
+    selectedAddressStatus,
+    selectedAddressError,
+    networkVersion,
+  } = useEthereumAccount()
 
-  // layout
+  const { updateValue } = useOnLoadValue(KEY_ON_CHAIN_CHANGES)
+
+  useEffect(() => {
+    updateValue(networkVersion)
+  }, [networkVersion, updateValue])
+
+  // HTML
   const layoutInstalled = (
     <li className='collection-item'>
       Metamask Extension Installation : <b>{extensionStatus}</b>{' '}
       {extensionStatus === 'none' && (
-        <button className='waves-effect waves-light btn' onClick={startOnboarding}>
+        <button className='button-primary' onClick={startOnboarding}>
           Install
         </button>
       )}
@@ -97,7 +123,7 @@ export const MetamaskUser: FC = () => {
   const layoutAddress = (
     <li className='collection-item'>
       Connected Address: {selectedAddress ? <b>{selectedAddress}</b> : <i>{selectedAddressStatus} </i>}
-      {selectedAddressStatus === 'none' && (
+      {selectedAddressStatus !== 'done' && (
         <blockquote>
           {selectedAddressError ?? <>Please Login to Metamask and add this site to Connected Sites</>}
         </blockquote>

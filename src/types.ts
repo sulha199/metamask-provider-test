@@ -8,5 +8,5 @@ export type EthereumWindow = {
 }
 
 declare global {
-  interface Window { ethereum?: BaseProvider }
+  interface Window { ethereum?: BaseProvider & { networkVersion: string } }
 }

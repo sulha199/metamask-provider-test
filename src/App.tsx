@@ -1,21 +1,17 @@
 import './App.css'
 import { MetamaskUser } from './components/MetamaskUser'
+import { KEY_ON_CHAIN_CHANGES } from './consts'
+import { useOnLoadValue } from './hooks'
 
 function App() {
-  return <MetamaskUser />
+  const { value: networkVersion } = useOnLoadValue(KEY_ON_CHAIN_CHANGES)
 
-  // return (
-  //   <div className='App'>
-  //     <header className='App-header'>
-  //       <p>
-  //         Edit <code>src/App.tsx</code> and save to reload.
-  //       </p>
-  //       <a className='App-link' href='https://reactjs.org' target='_blank' rel='noopener noreferrer'>
-  //         Learn React
-  //       </a>
-  //     </header>
-  //   </div>
-  // )
+  return (
+    <div className='container'>
+      {networkVersion && <div className='alert alert-info'>Switched to NetworkVersion #{networkVersion}</div>}
+      <MetamaskUser />
+    </div>
+  )
 }
 
 export default App
