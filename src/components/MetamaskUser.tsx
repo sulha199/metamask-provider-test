@@ -1,4 +1,4 @@
-import { FC, useEffect } from 'react'
+import { FC, useEffect, useRef } from 'react'
 import { KEY_ON_CHAIN_CHANGES } from '../consts'
 import { useOnLoadValue } from '../hooks'
 import { useEthereumAccount } from './MetamaskUser.hooks'
@@ -14,6 +14,7 @@ export const MetamaskUser: FC = () => {
   } = useEthereumAccount()
 
   const { updateValue } = useOnLoadValue(KEY_ON_CHAIN_CHANGES)
+  const initialRender = useRef(true)
 
   // HTML
   const layoutInstalled = (
@@ -38,12 +39,14 @@ export const MetamaskUser: FC = () => {
   )
 
   useEffect(() => {
-    // only store value if window.ethereum?.selectedAddress,
-    // otherwise it will cause the network version alert to show
-    if (window.ethereum?.selectedAddress) {
+    if (initialRender.current) {
+      initialRender.current = false
+    } else if (window.ethereum?.selectedAddress) {
+      // only store value if selectedAddress != null and not initialRender,
+      // otherwise it will cause the unnecessary networkVersion alert to show
       updateValue(networkVersion)
     }
-  }, [networkVersion])
+  }, [networkVersion, updateValue])
 
   return (
     <ol className='collection'>
