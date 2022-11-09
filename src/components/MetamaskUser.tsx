@@ -15,14 +15,6 @@ export const MetamaskUser: FC = () => {
 
   const { updateValue } = useOnLoadValue(KEY_ON_CHAIN_CHANGES)
 
-  useEffect(() => {
-    // only store value if window.ethereum?.selectedAddress,
-    // otherwise it will cause the network version alert to show
-    if (window.ethereum?.selectedAddress) {
-      updateValue(networkVersion)
-    }
-  }, [networkVersion])
-
   // HTML
   const layoutInstalled = (
     <li className='collection-item'>
@@ -44,6 +36,14 @@ export const MetamaskUser: FC = () => {
       )}
     </li>
   )
+
+  useEffect(() => {
+    // only store value if window.ethereum?.selectedAddress,
+    // otherwise it will cause the network version alert to show
+    if (window.ethereum?.selectedAddress) {
+      updateValue(networkVersion)
+    }
+  }, [networkVersion])
 
   return (
     <ol className='collection'>
