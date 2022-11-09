@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/static/css/main.073c9b0a.css",
-    "main.js": "/static/js/main.890925f4.js",
-    "static/js/787.d7647d95.chunk.js": "/static/js/787.d7647d95.chunk.js",
-    "index.html": "/index.html",
-    "main.073c9b0a.css.map": "/static/css/main.073c9b0a.css.map",
-    "main.890925f4.js.map": "/static/js/main.890925f4.js.map",
-    "787.d7647d95.chunk.js.map": "/static/js/787.d7647d95.chunk.js.map"
+    "main.css": "/metamask-provider-test/static/css/main.073c9b0a.css",
+    "main.js": "/metamask-provider-test/static/js/main.b6ee735a.js",
+    "static/js/787.d7647d95.chunk.js": "/metamask-provider-test/static/js/787.d7647d95.chunk.js",
+    "index.html": "/metamask-provider-test/index.html",
+    "main.073c9b0a.css.map": "/metamask-provider-test/static/css/main.073c9b0a.css.map",
+    "main.b6ee735a.js.map": "/metamask-provider-test/static/js/main.b6ee735a.js.map",
+    "787.d7647d95.chunk.js.map": "/metamask-provider-test/static/js/787.d7647d95.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.073c9b0a.css",
-    "static/js/main.890925f4.js"
+    "static/js/main.b6ee735a.js"
   ]
 }
