@@ -22,7 +22,7 @@ export const useOnLoadValue= (key: string) => {
         localStorage.removeItem(key)
       }
     }
-  }, [key])
+  })
 
   return {value, updateValue}
 }
