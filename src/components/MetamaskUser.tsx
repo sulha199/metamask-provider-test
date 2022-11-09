@@ -21,7 +21,7 @@ export const MetamaskUser: FC = () => {
     if (window.ethereum?.selectedAddress) {
       updateValue(networkVersion)
     }
-  }, [networkVersion, updateValue])
+  }, [networkVersion])
 
   // HTML
   const layoutInstalled = (
