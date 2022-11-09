@@ -7,10 +7,12 @@ function App() {
   const { value: networkVersion } = useOnLoadValue(KEY_ON_CHAIN_CHANGES)
 
   return (
-    <div className='container'>
-      {networkVersion && <div className='alert alert-info'>Switched to NetworkVersion #{networkVersion}</div>}
-      <MetamaskUser />
-    </div>
+    <section>
+      <div className='container'>
+        {networkVersion && <div className='alert alert-info'>Switched to NetworkVersion #{networkVersion}</div>}
+        <MetamaskUser />
+      </div>
+    </section>
   )
 }
 
