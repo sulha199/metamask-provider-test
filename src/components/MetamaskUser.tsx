@@ -30,7 +30,7 @@ export const MetamaskUser: FC = () => {
   const layoutAddress = (
     <li className='collection-item'>
       Connected Address: {selectedAddress ? <b>{selectedAddress}</b> : <i>{selectedAddressStatus} </i>}
-      {selectedAddressStatus !== 'done' && (
+      {selectedAddressStatus !== 'done' && extensionStatus === 'done' && (
         <blockquote>
           {selectedAddressError ?? <>Please Login to Metamask and add this site to Connected Sites</>}
         </blockquote>
