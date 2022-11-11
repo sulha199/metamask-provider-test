@@ -9,9 +9,7 @@ function App() {
   return (
     <section>
       <div className='container'>
-        {networkVersion && (
-          <div className='alert alert-info'>Switched to Network #{getNetworkVersionName(networkVersion)}</div>
-        )}
+        {networkVersion && <div className='alert alert-info'>Switched to {getNetworkVersionName(networkVersion)}</div>}
         <MetamaskUser />
       </div>
     </section>

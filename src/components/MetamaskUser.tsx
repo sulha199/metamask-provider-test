@@ -13,7 +13,7 @@ export const getNetworkVersionName = (networkVersion: string | null) => {
   if (networkVersion == null) {
     return networkVersion
   }
-  return NETWORK_VERSION_NAME_MAP[networkVersion] ?? `Network Version #${networkVersion}`
+  return NETWORK_VERSION_NAME_MAP[networkVersion] ?? `Network #${networkVersion}`
 }
 
 export const MetamaskUser: FC = () => {
