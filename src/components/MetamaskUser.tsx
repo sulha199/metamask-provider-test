@@ -3,6 +3,19 @@ import { KEY_ON_CHAIN_CHANGES } from '../consts'
 import { useOnLoadValue } from '../hooks'
 import { useEthereumAccount } from './MetamaskUser.hooks'
 
+const NETWORK_VERSION_NAME_MAP: Record<string, string> = {
+  '1': 'Ethereum Mainnet',
+  '4': 'Rinkeby',
+  '3': 'Ropsten',
+}
+
+export const getNetworkVersionName = (networkVersion: string | null) => {
+  if (networkVersion == null) {
+    return networkVersion
+  }
+  return NETWORK_VERSION_NAME_MAP[networkVersion] ?? `Network Version #${networkVersion}`
+}
+
 export const MetamaskUser: FC = () => {
   const {
     extensionStatus,
@@ -18,7 +31,7 @@ export const MetamaskUser: FC = () => {
 
   // HTML
   const layoutInstalled = (
-    <li className='collection-item'>
+    <li>
       Metamask Extension Installation : <b>{extensionStatus}</b>{' '}
       {extensionStatus === 'none' && (
         <button className='button-primary' onClick={startOnboarding}>
@@ -27,8 +40,13 @@ export const MetamaskUser: FC = () => {
       )}
     </li>
   )
+  const layoutNetwork = (
+    <li>
+      Network: <b>{getNetworkVersionName(networkVersion) ?? 'N/A'}</b>
+    </li>
+  )
   const layoutAddress = (
-    <li className='collection-item'>
+    <li>
       Connected Address: {selectedAddress ? <b>{selectedAddress}</b> : <i>{selectedAddressStatus} </i>}
       {selectedAddressStatus !== 'done' && extensionStatus === 'done' && (
         <blockquote>
@@ -51,6 +69,7 @@ export const MetamaskUser: FC = () => {
   return (
     <ol className='collection'>
       {layoutInstalled}
+      {layoutNetwork}
       {layoutAddress}
     </ol>
   )

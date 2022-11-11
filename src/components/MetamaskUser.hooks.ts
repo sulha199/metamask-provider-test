@@ -83,7 +83,10 @@ export const useEthereumAccount = () => {
         setSlectedAddressError(message)
         return []
       })
-      .then(selectAddress)
+      .then(adresses =>{
+        selectAddress(adresses)
+        setNetworkVersion(getNetworkVersion())
+    })
     window.ethereum?.on(ETH_EVENT_ACCOUNTS_CHANGED, selectAddress)
     window.ethereum?.on(ETH_EVENT_CHAIN_CHANGED, onChainChanged)
     return () => {

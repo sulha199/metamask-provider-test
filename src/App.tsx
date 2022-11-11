@@ -1,5 +1,5 @@
 import './App.css'
-import { MetamaskUser } from './components/MetamaskUser'
+import { getNetworkVersionName, MetamaskUser } from './components/MetamaskUser'
 import { KEY_ON_CHAIN_CHANGES } from './consts'
 import { useOnLoadValue } from './hooks'
 
@@ -9,7 +9,9 @@ function App() {
   return (
     <section>
       <div className='container'>
-        {networkVersion && <div className='alert alert-info'>Switched to NetworkVersion #{networkVersion}</div>}
+        {networkVersion && (
+          <div className='alert alert-info'>Switched to Network #{getNetworkVersionName(networkVersion)}</div>
+        )}
         <MetamaskUser />
       </div>
     </section>
